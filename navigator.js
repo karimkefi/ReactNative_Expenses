@@ -28,7 +28,7 @@ function ExpensesTab() {
                         color={tintColor}
                         onPress={() => {
                             navigation.navigate('ManageExpense');
-                         }}
+                        }}
                     />
                 )
             })}
@@ -59,13 +59,16 @@ function ExpensesTab() {
 export default function MainNavigator() {
     return (
         <NavigationContainer>
-            <Stack.Navigator initialRouteName='ExpensesTab'>
+            <Stack.Navigator initialRouteName='ExpensesTab' screenOptions={{
+                headerStyle: { backgroundColor: GlobalStyles.colors.primary500 },
+                headerTintColor: 'white'
+            }}>
                 <Stack.Screen
                     name="ExpensesTab"
                     component={ExpensesTab}
                     options={{ headerShown: false }}
                 />
-                <Stack.Screen name="ManageExpense" component={ManageExpense} />
+                <Stack.Screen name="ManageExpense" component={ManageExpense} options={{ presentation: 'modal' }} />
             </Stack.Navigator>
         </NavigationContainer>
     );

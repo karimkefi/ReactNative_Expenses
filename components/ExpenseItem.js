@@ -4,12 +4,14 @@ import { GlobalStyles } from '../constants/styles'
 
 import { getFormattedDate } from '../utility/date';
 
-function ExpenseItem({ description, amount, date }) {
+function ExpenseItem({ id, description, amount, date }) {
 
     const navigation = useNavigation();
 
     function expensePressedHandler() {
-        navigation.navigate('ManageExpense')
+        navigation.navigate('ManageExpense', {
+            expenseID: id,
+        })
     }
 
     return (
