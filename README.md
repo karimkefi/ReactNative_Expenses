@@ -9,7 +9,7 @@ https://www.udemy.com/course/react-native-the-practical-guide
 
 Done once - Download dependencies by running 
     $ `npm install`
-    $ `expo upgrade`
+    $ `expo upgrade` (sometimes needed)
 
 ====================================================================================================
 

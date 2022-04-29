@@ -50,7 +50,9 @@ function expensesReducer(state, action) {
             return [{ ...action.payload, id: randomID }, ...state]
         case 'UPDATE':
             //find index and copy expense
-            const updateExpenseID = state.findIndex((expense) => { expense.id === action.payload.id });
+            const updateExpenseID = state.findIndex(
+                (expense) => expense.id === action.payload.id
+            );
             const updateExpense = state[updateExpenseID];
             //update the item using spread operators (this will override key value pairs which are in payload)
             const updatedItem = { ...updateExpense, ...action.payload.data };
@@ -59,6 +61,7 @@ function expensesReducer(state, action) {
             //override the element in the array with the new updateItem
             updateExpenseArr[updateExpenseID] = updatedItem
             //return new state (i.e. expenses array)
+            console.log('ovovovoovovoovov', updateExpenseID)
             return updateExpenseArr
         case 'DELETE':
             return state.filter((expense) => expense.id !== action.payload)

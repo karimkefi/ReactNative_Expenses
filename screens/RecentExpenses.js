@@ -13,14 +13,16 @@ function RecentExpenses() {
 
     const recentExpenses = expensesCtx.expenses.filter(expense => { 
 
-        console.log('week ago', weekAgo)
-
         //return true if greater than 1 week ago
-        return expense.date > weekAgo
+        return (expense.date >= weekAgo) && (expense.date <= today)
     })
 
     return (
-        <ExpensesOutput expenses={recentExpenses} expensesPeriod="Last 7 days" />    
+        <ExpensesOutput
+            expenses={recentExpenses}
+            expensesPeriod="Last 7 days"
+            fallbackText="No expenses registered in the last 7 days"
+        />    
     )
 }
 

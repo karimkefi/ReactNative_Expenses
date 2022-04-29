@@ -1,11 +1,15 @@
-import { useLayoutEffect } from 'react';
-import { Text, View, Button, StyleSheet } from 'react-native';
+import { useLayoutEffect, useContext } from 'react';
+import { View, StyleSheet, TextInput } from 'react-native';
 
+import ExpenseForm from '../components/ManageExpense/ExpenseForm';
 import CustomButton from '../components/UI/CustomButton';
 import IconButton from '../components/UI/IconButton'
 import { GlobalStyles } from '../constants/styles';
+import { ExpensesContext } from '../store/expenses-context'
 
 function ManageExpense({ route, navigation }) {
+
+    const expensesCtx = useContext(ExpensesContext);
 
     //"?" at the end of params allows JavaScript to check if the param has any values
     //if it didnt (i.e. it was an empty object) then we would get an error when trying to find an undefined "expenseID"
@@ -21,7 +25,8 @@ function ManageExpense({ route, navigation }) {
     }, [navigation, isEditing]);
 
     function deleteExpenseHandler() {
-        navigation.goBack()
+        expensesCtx.deleteExpense(editExpenseID);
+        navigation.goBack();
     };
 
     function cancelHandler() {
@@ -29,6 +34,22 @@ function ManageExpense({ route, navigation }) {
     };
 
     function confirmHandler() {
+        if (isEditing) {
+            expensesCtx.updateExpense(
+                editExpenseID,
+                {
+                    description: 'Test update',
+                    amount: 55,
+                    date: new Date('2022-10-31')
+                }
+            );
+        } else {
+            expensesCtx.addExpense({
+                description: 'Test add',
+                amount: 99,
+                date: new Date('2022-12-31')
+            });
+        }
         navigation.goBack()
     };
 
@@ -36,6 +57,7 @@ function ManageExpense({ route, navigation }) {
     return (
 
         <View style={styles.container}>
+            <ExpenseForm />
             <View style={styles.buttonContainer}>
                 <CustomButton onPress={cancelHandler} mode='flat' style={styles.button}>
                     Cancel
