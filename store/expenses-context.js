@@ -1,6 +1,6 @@
 import { createContext, useReducer } from 'react';
 
-const DUMMYEXPENSES = [
+const DUMMY_EXPENSES = [
     {
         id: 'e1',
         description: 'A pair of shoes',
@@ -76,7 +76,7 @@ function ExpensesContextProvider({ children }) {
     //useReducer returns 2 elements (state object and dispatch function)
     //dispatch function is used below to dispact actions to expensesReducer
     //2nd argument passed to useReducer is the initial state.
-    const [expensesState, dispatch] = useReducer(expensesReducer, DUMMYEXPENSES);
+    const [expensesState, dispatch] = useReducer(expensesReducer, DUMMY_EXPENSES);
 
     function addExpense(expenseData) {
         dispatch({ type: 'ADD', payload: expenseData });
@@ -99,7 +99,9 @@ function ExpensesContextProvider({ children }) {
     };
 
     return (
-        <ExpensesContext.Provider value={value}>{children}</ExpensesContext.Provider>
+        <ExpensesContext.Provider value={value}>
+            {children}
+        </ExpensesContext.Provider>
     );
 }
 
