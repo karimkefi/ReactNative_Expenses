@@ -17,6 +17,11 @@ function ManageExpense({ route, navigation }) {
     //"!!" == "not not" is a JavaScript trick to conver a value into a boolean
     const isEditing = !!editExpenseID
 
+    //selected expense if updating... this will be used to prepopulate the form
+    const selectedExpense = expensesCtx.expenses.find(
+        (expense) => expense.id === editExpenseID
+    )
+
     useLayoutEffect(() => {
         navigation.setOptions({
             title: isEditing ? "Edit Expense" : "Add Expense"
@@ -34,7 +39,7 @@ function ManageExpense({ route, navigation }) {
 
     function confirmHandler(expenseData) {
         if (isEditing) {
-            expensesCtx.updateExpense( editExpenseID, expenseData );
+            expensesCtx.updateExpense(editExpenseID, expenseData);
         } else {
             expensesCtx.addExpense(expenseData);
         }
@@ -49,6 +54,7 @@ function ManageExpense({ route, navigation }) {
                 submitButtonLabel={isEditing ? 'Update' : 'Add'}
                 onCancel={cancelHandler}
                 onSubmit={confirmHandler}
+                defaultValues={selectedExpense}
             />
 
             {isEditing ?

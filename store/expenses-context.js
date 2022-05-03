@@ -46,6 +46,7 @@ export const ExpensesContext = createContext({
 function expensesReducer(state, action) {
     switch (action.type) {
         case 'ADD':
+            console.log('context ADD')
             const randomID = new Date().toString() + Math.random().toString();
             return [{ ...action.payload, id: randomID }, ...state]
         case 'UPDATE':
@@ -61,9 +62,10 @@ function expensesReducer(state, action) {
             //override the element in the array with the new updateItem
             updateExpenseArr[updateExpenseID] = updatedItem
             //return new state (i.e. expenses array)
-            console.log('ovovovoovovoovov', updateExpenseID)
+            console.log('context UPDATE', updateExpenseID)
             return updateExpenseArr
         case 'DELETE':
+            console.log('context DELETE', action.payload)
             return state.filter((expense) => expense.id !== action.payload)
         default:
             return state;
