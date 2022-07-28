@@ -1,14 +1,21 @@
-import { useLayoutEffect, useContext } from 'react';
-import { View, StyleSheet, TextInput } from 'react-native';
+import { useLayoutEffect, useContext, useState } from 'react';
+import { View, StyleSheet } from 'react-native';
 
 import ExpenseForm from '../components/ManageExpense/ExpenseForm';
 import IconButton from '../components/UI/IconButton'
+import LoadingOverlay from '../components/UI/LoadingOverlay';
+import ErrorOverlay from '../components/UI/ErrorOverlay';
+
 import { GlobalStyles } from '../constants/styles';
 import { ExpensesContext } from '../store/expenses-context'
+import { storeExpense, updateExpense, deleteExpense } from '../utility/http';
 
 function ManageExpense({ route, navigation }) {
 
     const expensesCtx = useContext(ExpensesContext);
+
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState();
 
     //"?" at the end of params allows JavaScript to check if the param has any values
     //if it didnt (i.e. it was an empty object) then we would get an error when trying to find an undefined "expenseID"
@@ -28,24 +35,49 @@ function ManageExpense({ route, navigation }) {
         })
     }, [navigation, isEditing]);
 
-    function deleteExpenseHandler() {
-        expensesCtx.deleteExpense(editExpenseID);
-        navigation.goBack();
+    async function deleteExpenseHandler() {
+        setIsLoading(true);
+        try {
+            await deleteExpense(editExpenseID)
+            expensesCtx.deleteExpense(editExpenseID);
+            navigation.goBack();
+        }
+        catch (err) {
+            setError('Could not delete expense')
+            setIsLoading(false);
+        }
     };
 
     function cancelHandler() {
         navigation.goBack()
     };
 
-    function confirmHandler(expenseData) {
-        if (isEditing) {
-            expensesCtx.updateExpense(editExpenseID, expenseData);
-        } else {
-            expensesCtx.addExpense(expenseData);
+    async function confirmHandler(expenseData) {
+        setIsLoading(true);
+        try {
+            if (isEditing) {
+                expensesCtx.updateExpense(editExpenseID, expenseData);
+                await updateExpense(editExpenseID, expenseData);
+            } else {
+                const id = await storeExpense(expenseData)
+                expensesCtx.addExpense({ ...expenseData, id: id });
+            }
+            navigation.goBack()
         }
-        navigation.goBack()
+        catch (err) {
+            setError('Could not save expense - pls try again')
+            setIsLoading(false)
+        }
     };
 
+
+    if (error && !isLoading) {
+        return <ErrorOverlay />
+    }
+
+    if (isLoading) {
+        return <LoadingOverlay message={error} />
+    }
 
     return (
 

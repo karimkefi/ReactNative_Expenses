@@ -45,7 +45,7 @@ function ExpenseForm({ submitButtonLabel, onCancel, onSubmit, defaultValues }) {
             description: inputs.description.value,
         }
 
-        //validate form befor submitting
+        //validate form before submitting
         const amountIsValid = expenseData.amount > 0 && !isNaN(expenseData.amount)
         //"Invalid Date" is what JS will return if you run "new Date('hello')"
         const dateIsValid = expenseData.date.toString() !== "Invalid Date";
@@ -68,7 +68,7 @@ function ExpenseForm({ submitButtonLabel, onCancel, onSubmit, defaultValues }) {
     };
 
     //if any of values is not valid, the overall form is not valid
-    const forIsInvalid = !inputs.amount.isValid || !inputs.date.isValid || !inputs.description.isValid;
+    const formIsInvalid = !inputs.amount.isValid || !inputs.date.isValid || !inputs.description.isValid;
 
     return (
         <Pressable onPress={() => { Keyboard.dismiss() }} >
@@ -95,7 +95,7 @@ function ExpenseForm({ submitButtonLabel, onCancel, onSubmit, defaultValues }) {
                     value: inputs.description.value,
                 }}
                 />
-                {forIsInvalid ? <Text style={styles.errorText}>Invalid Input values - please check your entered data!</Text> : null}
+                {formIsInvalid ? <Text style={styles.errorText}>Invalid Input values - please check your entered data!</Text> : null}
                 <View style={styles.buttonContainer}>
                     <CustomButton onPress={onCancel} mode='flat' style={styles.button}>
                         Cancel

@@ -66,7 +66,9 @@ use
         );
     }
 ------------------------------------------------------------------------
-
+HTTP requests
+Set up Firebase realtime database in test mode
+    - $ `npm install axios` (if you dont want to use fetch)
 
 ====================================================================================================
 
@@ -79,3 +81,12 @@ imported like this..
     `<Ionicons name="md-remove" size={25} color="white" />`
 
 ====================================================================================================
+
+ERROR 
+
+TypeError: undefined is not an object (evaluating 'ReactCurrentActQueue$1.isBatchingLegacy')
+
+
+https://github.com/facebook/react-native/issues/34079
+
+    - $ `npm install react-native@0.68.2 --force`
