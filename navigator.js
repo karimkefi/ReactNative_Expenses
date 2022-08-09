@@ -1,14 +1,19 @@
+import { useContext } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
 
+import LoginScreen from './screens/LoginScreen';
+import SignupScreen from './screens/SignupScreen';
 import ManageExpense from './screens/ManageExpenses';
 import RecentExpenses from './screens/RecentExpenses';
 import AllExpenses from './screens/AllExpenses';
+import IconButton from './components/UI/IconButton';
+
+import { AuthContext } from './store/auth-context';
 
 import { GlobalStyles } from './constants/styles';
-import IconButton from './components/UI/IconButton';
 
 const Stack = createNativeStackNavigator();
 const BottomTabs = createBottomTabNavigator();
@@ -55,21 +60,50 @@ function ExpensesTab() {
     )
 };
 
+function AuthStack() {
+    return (
+        <Stack.Navigator
+            screenOptions={{
+                headerStyle: { backgroundColor: GlobalStyles.primary500 },
+                headerTintColor: 'white',
+                contentStyle: { backgroundColor: GlobalStyles.primary100 },
+            }}
+        >
+            <Stack.Screen name="Login" component={LoginScreen} />
+            <Stack.Screen name="Signup" component={SignupScreen} />
+        </Stack.Navigator>
+    );
+}
+
+function AuthenticatedStack() {
+    return (
+        <Stack.Navigator initialRouteName='ExpensesTab' screenOptions={{
+            headerStyle: { backgroundColor: GlobalStyles.colors.primary500 },
+            headerTintColor: 'white'
+        }}>
+            <Stack.Screen
+                name="ExpensesTab"
+                component={ExpensesTab}
+                options={{ headerShown: false }}
+            />
+            <Stack.Screen
+                name="ManageExpense"
+                component={ManageExpense}
+                options={{ presentation: 'modal' }}
+            />
+        </Stack.Navigator>
+    )
+}
 
 export default function MainNavigator() {
+    const authCtx = useContext(AuthContext);
+
     return (
         <NavigationContainer>
-            <Stack.Navigator initialRouteName='ExpensesTab' screenOptions={{
-                headerStyle: { backgroundColor: GlobalStyles.colors.primary500 },
-                headerTintColor: 'white'
-            }}>
-                <Stack.Screen
-                    name="ExpensesTab"
-                    component={ExpensesTab}
-                    options={{ headerShown: false }}
-                />
-                <Stack.Screen name="ManageExpense" component={ManageExpense} options={{ presentation: 'modal' }} />
-            </Stack.Navigator>
+            {!authCtx.isAuthenticated ?
+                <AuthStack /> :
+                <AuthenticatedStack />
+            }
         </NavigationContainer>
     );
 }
