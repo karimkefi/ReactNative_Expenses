@@ -59,7 +59,7 @@ function ManageExpense({ route, navigation }) {
                 expensesCtx.updateExpense(editExpenseID, expenseData);
                 await updateExpense(editExpenseID, expenseData);
             } else {
-                const id = await storeExpense(expenseData)
+                const id = await storeExpense(expenseData);
                 expensesCtx.addExpense({ ...expenseData, id: id });
             }
             navigation.goBack()

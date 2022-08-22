@@ -19,6 +19,7 @@ const Stack = createNativeStackNavigator();
 const BottomTabs = createBottomTabNavigator();
 
 function ExpensesTab() {
+    const authCtx = useContext(AuthContext);
     return (
         <BottomTabs.Navigator
             screenOptions={({ navigation }) => ({
@@ -34,6 +35,14 @@ function ExpensesTab() {
                         onPress={() => {
                             navigation.navigate('ManageExpense');
                         }}
+                    />
+                ),
+                headerLeft: ({ tintColor }) => (
+                    <IconButton
+                        iconName="exit"
+                        size={24}
+                        color={tintColor}
+                        onPress={authCtx.logout}
                     />
                 )
             })}
