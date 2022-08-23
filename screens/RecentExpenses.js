@@ -5,6 +5,7 @@ import LoadingOverlay from '../components/UI/LoadingOverlay';
 import ErrorOverlay from '../components/UI/ErrorOverlay';
 
 import { ExpensesContext } from '../store/expenses-context';
+import { AuthContext } from '../store/auth-context';
 import { getDateMinusDays } from '../utility/date';
 import { fetchExpenses } from '../utility/http';
 
@@ -14,15 +15,16 @@ function RecentExpenses() {
     const [error, setError] = useState();
 
     const expensesCtx = useContext(ExpensesContext);
+    const authCtx = useContext(AuthContext);
+    const token = authCtx.token;
 
     useEffect(() => {
-
         //creating getExpense method as this returns a promise. 
         //We do not want to make useEffect an async function (as this will result in it returning a promise)!
         async function getExpenses() {
             setIsLoading(true)
             try {
-                const expenses = await fetchExpenses();
+                const expenses = await fetchExpenses(token);
                 expensesCtx.setExpenses(expenses);
             }
             catch (err) {
@@ -32,7 +34,7 @@ function RecentExpenses() {
         };
 
         getExpenses();
-    }, []);
+    }, [token]);
 
     const today = new Date();
     const weekAgo = getDateMinusDays(today, 7)

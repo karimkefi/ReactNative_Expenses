@@ -8,11 +8,14 @@ import ErrorOverlay from '../components/UI/ErrorOverlay';
 
 import { GlobalStyles } from '../constants/styles';
 import { ExpensesContext } from '../store/expenses-context'
+import { AuthContext } from '../store/auth-context';
 import { storeExpense, updateExpense, deleteExpense } from '../utility/http';
 
 function ManageExpense({ route, navigation }) {
 
     const expensesCtx = useContext(ExpensesContext);
+    const authCtx = useContext(AuthContext);
+    const token = authCtx.token;
 
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState();
@@ -38,7 +41,7 @@ function ManageExpense({ route, navigation }) {
     async function deleteExpenseHandler() {
         setIsLoading(true);
         try {
-            await deleteExpense(editExpenseID)
+            await deleteExpense(editExpenseID, token)
             expensesCtx.deleteExpense(editExpenseID);
             navigation.goBack();
         }
@@ -57,9 +60,9 @@ function ManageExpense({ route, navigation }) {
         try {
             if (isEditing) {
                 expensesCtx.updateExpense(editExpenseID, expenseData);
-                await updateExpense(editExpenseID, expenseData);
+                await updateExpense(editExpenseID, expenseData, token);
             } else {
-                const id = await storeExpense(expenseData);
+                const id = await storeExpense(expenseData, token);
                 expensesCtx.addExpense({ ...expenseData, id: id });
             }
             navigation.goBack()

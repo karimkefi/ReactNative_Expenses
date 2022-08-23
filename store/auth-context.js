@@ -11,11 +11,12 @@ function AuthContextProvider({ children }) {
 
     const [authToken, setAuthToken] = useState();
 
-    function authenticate(token) { 
+    function authenticate(token) {
+        //console.log('Token = ', token);
         setAuthToken(token);
     }
 
-    function logout() { 
+    function logout() {
         setAuthToken(null);
     };
 

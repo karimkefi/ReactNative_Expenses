@@ -1,18 +1,18 @@
 import axios from 'axios';
 
-const URL = 'https://rn-expense-e4879-default-rtdb.europe-west1.firebasedatabase.app';
+const BASE_URL = 'https://rn-expense-e4879-default-rtdb.europe-west1.firebasedatabase.app';
 
-export async function storeExpense(expenseData) {
+export async function storeExpense(expenseData, token) {
     const response = await axios.post(
-        URL + '/expenses.json',
+        BASE_URL + '/expenses.json' + '?auth=' + token,
         expenseData
     );
     const id = response.data.name;
     return id;
 }
 
-export async function fetchExpenses() {
-    const response = await axios.get(URL + '/expenses.json');
+export async function fetchExpenses(token) {
+    const response = await axios.get(BASE_URL + '/expenses.json' + '?auth=' + token);
 
     const expenses = [];
     for (const key in response.data) {
@@ -29,10 +29,13 @@ export async function fetchExpenses() {
 }
 
 //we are not awaiting any response, hence we do not need to make this async function.
-export function updateExpense(id, expenseData) {
-    return axios.put(URL + `/expenses/${id}.json`, expenseData);
+export function updateExpense(id, expenseData, token) {
+    return axios.put(
+        BASE_URL + `/expenses/${id}.json` + '?auth=' + token,
+        expenseData
+    );
 };
 
-export async function deleteExpense(id) {
-    return axios.delete(URL + `/expenses/${id}.json`);
+export async function deleteExpense(id, token) {
+    return axios.delete(BASE_URL + `/expenses/${id}.json` + '?auth=' + token);
 };
